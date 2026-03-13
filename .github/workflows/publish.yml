@@ -6,14 +6,17 @@ on:
     branches:
       - master
   release:
-    types:
-    - published
+    types: [published]
 
 jobs:
   dist:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.x"
 
     - name: Build wheel and SDist
       run: pipx run build
@@ -23,18 +26,18 @@ jobs:
 
     - uses: actions/upload-artifact@v7
       with:
+        name: dist
         path: dist/*
 
-
   publish:
-    needs: [dist]
+    needs: dist
     runs-on: ubuntu-latest
     if: github.event_name == 'release' && github.event.action == 'published'
 
     steps:
     - uses: actions/download-artifact@v8
       with:
-        name: artifact
+        name: dist
         path: dist
 
     - uses: pypa/gh-action-pypi-publish@v1.13.0
