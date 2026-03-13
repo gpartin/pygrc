@@ -1,11 +1,12 @@
 # pygrc
 
 [![License](https://img.shields.io/github/license/amanmdesai/pygrc)](https://github.com/amanmdesai/pygrc/blob/master/LICENSE.txt)
-[![publish](https://github.com/amanmdesai/pygrc/actions/workflows/publish.yml/badge.svg)](https://github.com/amanmdesai/pygrc/actions/workflows/publish.yml)
-[![test](https://github.com/amanmdesai/pygrc/actions/workflows/test.yaml/badge.svg)](https://github.com/amanmdesai/pygrc/actions/workflows/test.yaml)
-[![PyPI Package latest release](https://img.shields.io/pypi/v/pygrc.svg)](https://pypi.python.org/pypi/pygrc)
+[![CI Tests](https://github.com/amanmdesai/pygrc/actions/workflows/test.yaml/badge.svg)](https://github.com/amanmdesai/pygrc/actions/workflows/test.yaml)
+[![Publish](https://github.com/amanmdesai/pygrc/actions/workflows/publish.yml/badge.svg)](https://github.com/amanmdesai/pygrc/actions/workflows/publish.yml)
+[![PyPI Version](https://img.shields.io/pypi/v/pygrc)](https://pypi.org/project/pygrc/)
+[![Python Versions](https://img.shields.io/pypi/pyversions/pygrc)](https://pypi.org/project/pygrc/)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7546312.svg)](https://doi.org/10.5281/zenodo.7546312)
-[![JBI](https://img.shields.io/badge/Journal_of_Brief_Ideas-10.5281/zenodo.8092602-red.svg)](https://beta.briefideas.org/ideas/71d1533579769a11cae153150ce6f3ea)
+[![Journal of Brief Ideas](https://img.shields.io/badge/Journal_of_Brief_Ideas-10.5281/zenodo.8092602-red)](https://beta.briefideas.org/ideas/71d1533579769a11cae153150ce6f3ea)
 
 ## Author
 
