@@ -1,6 +1,3 @@
-"""
-Copyright (c) 2023 Aman Desai. All rights reserved.
-"""
 from iminuit import Minuit
 from iminuit.cost import LeastSquares
 import numpy as np

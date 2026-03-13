@@ -1,6 +1,3 @@
-"""
-Copyright (c) 2023 Aman Desai. All rights reserved.
-"""
 import os
 import pandas as pd
 import numpy as np
