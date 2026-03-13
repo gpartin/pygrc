@@ -1,6 +1,4 @@
 """
-Copyright (c) 2023 Aman Desai. All rights reserved.
-
 LFM-RAR rotation curve model for SPARC data.
 
 Predicts galaxy rotation curves from baryonic mass using the radial
