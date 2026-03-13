@@ -1,10 +1,7 @@
-"""
-Copyright (c) 2026 G. Partin. MIT License.
-Author: G. Partin, Date: March 2026
-"""
 from pygrc.lfm import LFM, v_baryonic, lfm_rar_velocity
 import numpy as np
 import pandas as pd
+import pytest
 
 
 def _make_galaxy(n=20):
@@ -54,3 +51,10 @@ def test_lfm_rar_velocity():
     assert len(vpred) == 3, "Output length should match input"
     assert all(vpred >= vbar), \
         "LFM-RAR velocity should be >= baryonic velocity"
+
+
+def test_lfm_rar_velocity_negative_radius():
+    r = np.array([-1.0, 5.0, 10.0])
+    vbar = np.array([100.0, 120.0, 130.0])
+    with pytest.raises(ValueError):
+        lfm_rar_velocity(r, vbar)

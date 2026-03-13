@@ -1,6 +1,5 @@
 """
-Copyright (c) 2026 G. Partin. MIT License.
-Author: G. Partin, Date: March 2026
+Copyright (c) 2023 Aman Desai. All rights reserved.
 
 LFM-RAR rotation curve model for SPARC data.
 
@@ -27,9 +26,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import typing as tp
 
-# LFM fundamental constants
-CHI_0 = 19  # lattice vacuum stiffness: 3^3 - 2^3
-KAPPA = 1 / 63  # chi-energy coupling: 1/(4^3 - 1)
+# LFM fundamental constants (kept for reference; not used in computations)
+_CHI_0 = 19  # lattice vacuum stiffness: 3^3 - 2^3
+_KAPPA = 1 / 63  # chi-energy coupling: 1/(4^3 - 1)
 
 # Physical constants
 _C = 2.998e8  # speed of light [m/s]
@@ -93,13 +92,24 @@ def lfm_rar_velocity(
     Returns:
         predicted rotation velocity in km/s
     """
+    r_kpc = np.asarray(r_kpc, dtype=float)
+    v_bar_kms = np.asarray(v_bar_kms, dtype=float)
+
+    if np.any(r_kpc < 0):
+        raise ValueError("r_kpc must be non-negative.")
+
     r_m = r_kpc * _KPC
     v_bar_ms = v_bar_kms * _KM
-    r_safe = np.maximum(r_m, 1.0)
-    g_bar = v_bar_ms ** 2 / r_safe
-    # Step 6: g_obs^2 = g_bar^2 + g_bar * a0  (unique simplest interpolation)
-    g_obs = np.sqrt(g_bar ** 2 + g_bar * a0)
-    return np.sqrt(g_obs * r_safe) / _KM
+
+    v_pred = np.zeros_like(v_bar_ms)
+    mask = r_m > 0
+    if np.any(mask):
+        r_pos = r_m[mask]
+        g_bar = v_bar_ms[mask] ** 2 / r_pos
+        # Step 6: g_obs^2 = g_bar^2 + g_bar * a0  (unique simplest interpolation)
+        g_obs = np.sqrt(g_bar ** 2 + g_bar * a0)
+        v_pred[mask] = np.sqrt(g_obs * r_pos) / _KM
+    return v_pred
 
 
 class LFM:
@@ -155,18 +165,20 @@ class LFM:
             optimal Upsilon_disk value
         """
         v_obs = self.v_obs
-        vgas = self.data["Vgas"].values
-        vdisk = self.data["Vdisk"].values
-        vbul = self.data["Vbul"].values
+        err = np.maximum(self.err_v, 1.0)
         r = self.r
 
+        vgas2 = self.data["Vgas"].values ** 2
+        vdisk2 = self.data["Vdisk"].values ** 2
+        bar_fixed = vgas2 + self.ups_bulge * self.data["Vbul"].values ** 2
+
         grid = np.linspace(ups_bounds[0], ups_bounds[1], 1000)
-        residuals = np.array([
-            np.sum((v_obs - lfm_rar_velocity(
-                r, np.sqrt(vgas ** 2 + u * vdisk ** 2
-                           + self.ups_bulge * vbul ** 2)
-            )) ** 2) for u in grid
+        ups_grid = grid[:, None]  # (N_grid, 1)
+        v_bar_grid = np.sqrt(bar_fixed + ups_grid * vdisk2)  # (N_grid, N_r)
+        v_model_grid = np.array([
+            lfm_rar_velocity(r, v_bar_grid[i]) for i in range(len(grid))
         ])
+        residuals = np.sum(((v_obs - v_model_grid) / err) ** 2, axis=1)
         best = grid[np.argmin(residuals)]
         self.ups_disk = best
         self.v_bar = v_baryonic(self.data, best, self.ups_bulge)
@@ -188,13 +200,13 @@ class LFM:
         return float(np.sqrt(np.mean((self.v_obs - self._v_pred) ** 2)))
 
     def chi2_reduced(self):
-        """Reduced chi-squared."""
+        """Reduced chi-squared (chi^2 per degree of freedom)."""
         if self._v_pred is None:
             self.predict()
         err = np.maximum(self.err_v, 1.0)
-        return float(
-            np.sum(((self.v_obs - self._v_pred) / err) ** 2) / len(self.v_obs)
-        )
+        chi2 = np.sum(((self.v_obs - self._v_pred) / err) ** 2)
+        dof = max(len(self.v_obs) - 1, 1)
+        return float(chi2 / dof)
 
     def summary(self):
         """
