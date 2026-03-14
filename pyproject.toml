@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pygrc"
+version = "0.5.0"
+description = "Python package to read and fit SPARC data for Galactic Rotation Curves"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+
+authors = [
+    { name = "Aman Desai", email = "amanmukeshdesai@gmail.com" }
+]
+
+maintainers = [
+    { name = "Aman Desai", email = "amanmukeshdesai@gmail.com" }
+]
+
+dependencies = [
+    "numpy",
+    "pandas",
+    "matplotlib",
+    "iminuit"
+]
+
+keywords = [
+    "astronomy",
+    "galaxy",
+    "rotation-curves",
+    "SPARC",
+    "physics"
+]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Astronomy",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+
+[project.urls]
+Homepage = "https://github.com/amanmdesai/pygrc"
+Repository = "https://github.com/amanmdesai/pygrc"
+Documentation = "https://amanmdesai.github.io/pygrc/"
+Issues = "https://github.com/amanmdesai/pygrc/issues"
+
+[tool.setuptools]
+license-files = ["LICENSE"]
+
+[tool.setuptools.packages.find]
+include = ["pygrc*"]
