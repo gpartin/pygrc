@@ -11,7 +11,15 @@
       "affiliation": "University of Adelaide"
     }
   ],
-  "contributors": [],
+  "contributors": [
+
+    {
+      "name": "...",
+      "orcid": "...",
+      "affiliation": "..."
+    }
+
+  ],
   "keywords": [
     "astronomy",
     "galaxy rotation curves",
