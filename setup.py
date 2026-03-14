@@ -5,7 +5,7 @@ with open('README.md','r') as file:
 
 setuptools.setup(
 name="pygrc",
-version="0.3.0",
+version="0.5.0",
 description= "A package to read SPARC data for Galactic Rotation Curves",
 author="Aman Desai",
 author_email="amanmukeshdesai@gmail.com",
